@@ -1,0 +1,5 @@
+name = Gavias themer
+description = Custom config for gaviasthemes
+core = 7.x
+package = gavias
+version = 7.x - 1.0

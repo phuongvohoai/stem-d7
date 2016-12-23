@@ -1,0 +1,223 @@
+html{
+    overflow-x: hidden!important;
+}
+body{
+  overflow-x: hidden;
+  &.boxed{
+    max-width: $container-large-desktop + 20px; 
+     @include box-shadow(0 0 5px lighten($gray, 50%));
+    margin: 0 auto;    
+    height: auto;
+  }
+}
+
+.topbar{
+  color: #bababa;
+  font-size: 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 10px 0;
+  .block{
+    margin: 0!important;
+  }
+  a{
+    color: #bababa;
+    font-size: 12px;
+  }
+}
+#header{
+  border-bottom: 1px solid $border-color;
+  width: 100%;
+  .logo{
+    padding-top: 12px;
+    @media(max-width: $screen-sm-max){
+      padding-top: 5px;
+      padding-bottom: 10px;
+    }
+  }   
+  .area-main-menu{
+    padding-right: 50px;
+  }
+  @media (min-width: $screen-md-min){
+      &.gv-fixonscroll{
+        top: -100px; 
+        @include transition(all 1s ease);
+        &.gv-fixed{
+          position: fixed; 
+          top: 0; 
+          left: 0; 
+          width: 100%; 
+          min-height: 80px; 
+          margin-top: -5px; 
+          z-index: 99; 
+          background-color: white;
+          @include box-shadow(0 0 4px 0 rgba(0, 0, 0, 0.4));
+          .topbar{
+            display: none;
+          }.logo{
+            margin-top: 0!important;
+          }
+           .tb-megamenu .nav-collapse ul.nav > li > a{
+            color: $black;
+            padding: 28px 18px!important;
+          }
+        }
+      }
+   }
+}
+
+.page-no-margin{
+  #block-system-main{
+    margin: 0;
+  }
+}
+
+.header-fixed{
+  #header{
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 0;
+    background: none;
+    z-index: 99;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    @media (min-width: $screen-md-min){
+      &.gv-fixonscroll{
+        &.gv-fixed{
+          .tb-megamenu .nav-collapse ul.nav > li > a{
+            color: $black!important;
+            &:hover{
+              color: $theme-color!important;
+            }   
+          }
+        }
+      }
+   }
+  }
+  .tb-megamenu .nav-collapse ul.nav {
+    > li{
+      > a{
+        border-color: rgba(255, 255, 255, 0.5)!important;
+        &:hover{
+          color: $theme-color!important;
+        }
+      }
+      &.active > a{
+        border-right:1px solid rgba(255, 255, 255, 0.5)!important;
+        color: $theme-color;
+      }
+    }
+  }
+
+  &.logged-in{
+    #header{
+      top: 0;
+    }
+  }
+}
+.content-full{
+   overflow: hidden;
+}
+
+.area{
+   margin-bottom: 20px;
+   &.highlighted{
+    
+   }
+   &.before_footer{
+      background: #F6F7F9;
+      border: 1px solid $border-color;
+   }
+}
+
+.after_content{
+  padding: 20px 0;
+  background: #EEEEEE;
+}
+
+.region-main-menu{
+  float: right;
+}
+
+.sidebar{
+  position: relative;
+  &:before, &:after{
+   // content: "";
+    @include size(1px, 10000px);
+    position: absolute; 
+    top: 0;
+    background: $border-color;
+    z-index: 1;
+  }
+  &:before{
+    left: 0;
+  }
+  &:after{
+    right: 0;
+  }
+}
+
+.main-menu{
+  background: $theme-color;
+}
+
+.footer{
+  background: #414B4F;
+  color: #aaa;
+  padding: 65px 0 0;
+  font-size: 14px;
+  a{
+    color: #fff;
+    font-size: 14px;
+    &:hover{
+      color: $theme-color;
+    }
+  }
+}
+
+.copyright{
+  background-color: #414B4F;
+  font-size: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  .copyright-inner{
+    padding: 30px 0;
+    border-top: 1px solid $border-color;
+    color: #aaa;
+    a{
+      color: $theme-color;
+    }
+    .block{
+      margin: 0;
+    }
+  }  
+}
+
+.hidden-breadcrumb #breadcrumbs{
+  display: none;
+}
+
+.breadcrumb-wrap{
+  background: url('#{$base-theme-image-path}/bg-breadcrumb.png') repeat scroll center center #f5f5f5;
+  padding: 30px 0 30px;
+  margin-bottom: 30px;
+  .ptitle{
+    font-size: 18px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: $black;
+    float: left;
+  }
+  #breadcrumbs{
+    float: right;
+    .breadcrumb{
+      padding-top: 10px;
+      margin: 0;
+      background: none;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: $black;
+      a{
+        color: $black;
+      }
+    }
+  }
+}  

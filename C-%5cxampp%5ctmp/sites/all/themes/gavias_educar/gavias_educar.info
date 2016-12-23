@@ -1,0 +1,96 @@
+name = Gavias Educar
+description = Gavias Educar Theme.
+core = 7.x
+engine = phptemplate
+screenshot = screenshot.png
+version = 1.2
+;Stylesheets
+stylesheets[all][] = vendor/owl-carousel/owl.carousel.css
+stylesheets[all][] = vendor/owl-carousel/owl.transitions.css
+stylesheets[all][] = vendor/prettyphoto/css/prettyPhoto.css
+stylesheets[all][] = 'css/font-awesome.css'
+stylesheets[all][] = 'css/animate.css'
+stylesheets[all][] = 'css/sliderlayer.css'
+
+;Scripts
+scripts[] = vendor/owl-carousel/owl.carousel.js
+scripts[] = vendor/isotope.pkgd.min.js
+scripts[] = vendor/masonry.pkgd.min.js
+scripts[] = vendor/wow.min.js
+scripts[] = vendor/jquery.appear.js
+scripts[] = vendor/count-to.js
+scripts[] = vendor/jquery.easypiechart.min.js
+scripts[] = vendor/prettyphoto/js/jquery.prettyPhoto.js
+scripts[] = vendor/jpreloader.min.js
+scripts[] = vendor/smoothscroll.js
+
+scripts[] = js/bootstrap.js
+scripts[] = js/imagesloader.min.js
+scripts[] = js/theme.plugins.js
+
+; Features (core settings)
+features[] = 'logo'
+;features[] = 'name'
+;features[] = 'slogan'
+features[] = 'node_user_picture'
+features[] = 'comment_user_picture'
+features[] = 'comment_user_verification'
+features[] = 'favicon'
+features[] = 'go_to_top_button'
+;features[] = 'secondary_menu'
+
+;Core regions
+regions[topbar] = Topbar
+regions[search] = Search
+regions[header_right] = 'Header Right'
+regions[main_menu] = 'Main menu'
+
+;Region Promotion
+regions[promotion] = 'Promotion'
+
+;Regions content
+regions[before_content] = Before Content
+regions[content_top] = 'Content Top'
+regions[content] = 'Main content'
+regions[content_bottom] = 'Content Bottom'
+regions[sidebar_left] = Left Sidebar
+regions[sidebar_right] = Right Sidebar
+regions[after_content] = After Content
+
+;Regions highlighted
+regions[highlighted] = 'Highlighted'
+regions[help] = 'Help'
+
+;Regions footer & copyright
+regions[before_footer] = Before Footer
+regions[footer_first] = Footer First
+regions[footer_second] = Footer Second
+regions[footer_third] = Footer Third
+regions[footer_four] = Footer Four
+regions[after_footer] = Ater Footer
+regions[copyright] = 'Copyright'
+
+;Breadcrumb
+settings[skin_color] = 0099CC
+settings[site_layout] = wide
+settings[background_select] = az_subtle
+settings[body_background_color] = CCCCCC
+settings[enable_skin_color] = 0
+settings[theme_skin] = ""
+settings[layout_sidebar] = "layout_sidebar_default"
+
+; Supported Skins
+skins[red] = 'Red Style'
+skins[green] = 'Green Style'
+skins[lilac] = 'Lilac Style'
+skins[orange] = 'Orange Style'
+skins[yellow] = 'Yellow Style'
+
+; Information added by drupal.org packaging script on 2015-04-20
+version = "7.x-1.0"
+core = "7.x"
+project = "gavias_educar"
+datestamp = "1353011329"
+
+
+

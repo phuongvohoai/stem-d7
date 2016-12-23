@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Gavias Educar Other Features feature.
+ */
+
+include_once 'gavias_educar_other_features.features.inc';

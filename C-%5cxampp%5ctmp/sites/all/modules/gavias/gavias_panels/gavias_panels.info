@@ -1,0 +1,6 @@
+name = Gavias Panels Additional Module
+description = Adding panel style and panel layout for the Gavias theme.
+core = 7.x
+package = gavias
+dependencies[] = panels
+dependencies[] = media

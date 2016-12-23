@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Gavias Educar Portfolio Features feature.
+ */
+
+include_once 'gavias_educar_portfolio_features.features.inc';

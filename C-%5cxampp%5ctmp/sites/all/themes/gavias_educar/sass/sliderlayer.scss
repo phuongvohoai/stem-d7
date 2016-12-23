@@ -1,0 +1,63 @@
+@import "vars/_theme_variables";
+@import "mixins/mixins";
+@import "mixins/template";
+.gavias_layerslider{
+   background: url(#{$base-theme-image-path}bg-s.png) repeat  #444444;
+}
+.gavias_layerslider, #gavias_slider_single{
+   .tp-caption{ 
+      font-family: $font-family-base!important;
+      z-index: 99;
+   }
+   .big-text{
+      color: #fff;
+      font-size: 45px;
+      font-weight: 700;
+      letter-spacing: 0;
+      font-family: $font-family-base;
+      text-transform: uppercase;
+   }
+   .medium-text{
+      color: #fff;
+      font-size: 22px;
+      font-family: $font-family-base;
+   }
+   .btn-slide{
+      border: 2px solid #fff;
+      font-size: 14px;
+      text-transform: uppercase;
+      backface-visibility: hidden;
+      cursor: pointer;
+      display: inline-block;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-right: 10px;
+      position: relative;
+      text-align: center;
+      color: #fff;
+      padding: 10px 20px;
+      @include transition(all 0.35s);
+      &.btn-slide-flat{
+         background: #000;
+         color: #fff;
+         border-color: #000;
+      }
+      &:hover{
+         color: #000;
+         background: #fff;
+         border-color: #fff;
+      } 
+   }
+   .gavias-overlay{
+      &:after{
+         content: "";
+         background: url(#{$base-theme-image-path}grid-slide.png) repeat rgba(0, 0, 0, 0.3);
+         position: absolute;
+         width: 100%;
+         height: 100%;
+         top: 0;
+         left: 0;
+         z-index: 1;
+      }
+   }
+}   

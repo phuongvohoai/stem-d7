@@ -1,0 +1,263 @@
+<?php
+
+/**
+ * Implements hook_help.
+ *
+ * Displays help and module information.
+ *
+ * @param path
+ *   Which path of the site we're using to display help
+ * @param arg
+ *   Array that holds the current path as returned from arg() function
+ */
+function bs_shortcodes_help($path, $arg) {
+  switch ($path) {
+    case "admin/help#bs_shortcodes":
+      return '<p>' . t("Adding Twitter Bootstrap functionality to the Shortcode API") . '</p>';
+      break;
+  }
+}
+
+function bs_shortcodes_preprocess_page(&$variables) {
+  $path = drupal_get_path('module', 'bs_shortcodes');
+  drupal_add_js($path . '/inc/js/custom.js', 'file');
+}
+
+function bs_shortcodes_shortcode_info() {
+
+
+  // Tooltips
+  $shortcodes['tooltip'] = array(
+      'title' => t('Tooltip'),
+      'description' => t('Makes a Tooltip appear above an element.'),
+      'process callback' => 'bs_shortcodes_shortcode_tooltip',
+      //'settings callback' => '_shortcode_settings_form', TODO
+     // 'tips callback' => 'bs_shortcodes_shortcode_tooltiptop_tip',
+      );
+
+  // Popovers
+  $shortcodes['popovertop'] = array(
+      'title' => t('popover Top'),
+      'description' => t('Makes a Popover appear above an element.'),
+      'process callback' => 'bs_shortcodes_shortcode_popovertop',
+      //'settings callback' => '_shortcode_settings_form', TODO
+      //'tips callback' => 'bs_shortcodes_shortcode_popovertop_tip',
+      );
+  $shortcodes['popoverright'] = array(
+      'title' => t('Popover Right'),
+      'description' => t('Makes a Popover appear to the right of an element.'),
+      'process callback' => 'bs_shortcodes_shortcode_popoverright',
+      //'settings callback' => '_shortcode_settings_form', TODO
+      //'tips callback' => 'bs_shortcodes_shortcode_popoverright_tip',
+      );
+  $shortcodes['popoverbottom'] = array(
+      'title' => t('Popover Bottom'),
+      'description' => t('Makes a Popover appear under an element.'),
+      'process callback' => 'bs_shortcodes_shortcode_popoverbottom',
+      //'settings callback' => '_shortcode_settings_form', TODO
+      //'tips callback' => 'bs_shortcodes_shortcode_popoverbottom_tip',
+      );
+  $shortcodes['popoverleft'] = array(
+      'title' => t('Popover Left'),
+      'description' => t('Makes a Popover appear to the left of an element.'),
+      'process callback' => 'bs_shortcodes_shortcode_popoverleft',
+      //'settings callback' => '_shortcode_settings_form', TODO
+      //'tips callback' => 'bs_shortcodes_shortcode_popoverleft_tip',
+      );
+
+  // Wells
+  $shortcodes['well'] = array(
+      'title' => t('Well'),
+      'description' => t('Wraps content in a styled well'),
+      'process callback' => 'bs_shortcodes_shortcode_well',
+      //'settings callback' => '_shortcode_settings_form', TODO
+      //'tips callback' => 'bs_shortcodes_shortcode_well_tip',
+      );
+  $shortcodes['well_large'] = array(
+      'title' => t('Well Large'),
+      'description' => t('Wraps content in a large styled well'),
+      'process callback' => 'bs_shortcodes_shortcode_well_large',
+      //'settings callback' => '_shortcode_settings_form', TODO
+      //'tips callback' => 'bs_shortcodes_shortcode_well_large_tip',
+      );
+  $shortcodes['well_small'] = array(
+      'title' => t('Well Small'),
+      'description' => t('Wraps content in a small styled well'),
+      'process callback' => 'bs_shortcodes_shortcode_well_small',
+      //'settings callback' => '_shortcode_settings_form', TODO
+      //'tips callback' => 'bs_shortcodes_shortcode_well_small_tip',
+      );
+
+  // Panels
+  $shortcodes['panel'] = array(
+      'title' => t('Panel'),
+      'description' => t('Wraps content in a styled panel'),
+      'process callback' => 'bs_shortcodes_shortcode_panel',
+      //'settings callback' => '_shortcode_settings_form', TODO
+      //'tips callback' => 'bs_shortcodes_shortcode_panel_tip',
+      );
+//----------------------------------------------------------------------
+ $shortcodes['alert'] = array(
+    'title' => t('Gavias Alert'),
+    'description' => t('Insert alert'),
+    'process callback' => 'shortcode_basic_tags_shortcode_alert',
+    //'tips callback' => 'shortcode_basic_tags_shortcode_accordion_tip',  
+  );
+
+  $shortcodes['accordions'] = array(
+    'title' => t('Gavias Accordions'),
+    'description' => t('Insert tab Accordion wrapper'),
+    'process callback' => 'shortcode_basic_tags_shortcode_accordions',
+    //'tips callback' => 'shortcode_basic_tags_shortcode_accordion_item_tip',  
+  );
+
+  $shortcodes['accordion'] = array(
+    'title' => t('Gavias Accordion Item'),
+    'description' => t('Insert tab Accordion item'),
+    'process callback' => 'shortcode_basic_tags_shortcode_accordion',
+    //'tips callback' => 'shortcode_basic_tags_shortcode_accordion_tip',  
+  );
+
+  $shortcodes['carousels'] = array(
+    'title' => t('Gavias Carousels'),
+    'description' => t('Insert carousels'),
+    'process callback' => 'shortcode_basic_tags_shortcode_carousels',
+    //'tips callback' => 'shortcode_basic_tags_shortcode_carousels_tip',  
+  );
+   $shortcodes['carousel_item'] = array(
+    'title' => t('Gavias Carousel item'),
+    'description' => t('Insert carousel item'),
+    'process callback' => 'shortcode_basic_tags_shortcode_carousel_item',
+    //'tips callback' => 'shortcode_basic_tags_shortcode_carousel_item_tip',  
+  );
+
+$shortcodes['column'] = array(
+    'title' => t('Gavias Column'),
+    'description' => t('Insert column bootstrap'),
+    'process callback' => 'shortcodes_basic_tags_shortcode_column',
+    //'tips callback' => 'shortcodes_basic_tags_shortcode_column_tip'
+    );
+
+//Tab
+$shortcodes['tabs'] = array(
+    'title' => t('Gavias Tabs'),
+    'description' => t('Insert Tab bootstrap'),
+    'process callback' => 'shortcodes_basic_tags_shortcode_tabs',
+    //'tips callback' => 'shortcodes_basic_tags_shortcode_tabs_tip'
+    );
+
+$shortcodes['tab'] = array(
+    'title' => t('Gavias Tab item'),
+    'description' => t('Insert Tab bootstrap'),
+    'process callback' => 'shortcodes_basic_tags_shortcode_tab',
+    //'tips callback' => 'shortcodes_basic_tags_shortcode_tab_tip'
+    );
+$shortcodes['animate'] = array(
+    'title' => t('Gavias Animate item'),
+    'description' => t('Insert animate div content'),
+    'process callback' => 'shortcode_basic_tags_shortcode_animals',
+    //'tips callback' => 'shortcodes_basic_tags_shortcode_animate_tip'
+);
+$shortcodes['image'] = array(
+  'title' => t('Image'),
+  'description' => t('Gavias Insert image'),
+  'process callback' => 'shortcodes_basic_tags_shortcode_img'
+  );
+  return $shortcodes;
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function bs_shortcodes_theme() {
+  return array(
+      // Tooltips
+      'shortcode_tooltiptop' => array(
+          'variables' => array(
+              'text' => '',
+              'id' => '',
+          ),
+      ),
+      'shortcode_tooltipright' => array(
+          'variables' => array(
+              'text' => '',
+              'id' => '',
+          ),
+      ),
+      'shortcode_tooltipbottom' => array(
+          'variables' => array(
+              'text' => '',
+              'id' => '',
+          ),
+      ),
+      'shortcode_tooltipleft' => array(
+          'variables' => array(
+              'text' => '',
+              'id' => '',
+          ),
+      ),
+      // Popovers
+      'shortcode_popover' => array(
+          'variables' => array(
+              'text' => '',
+              'id' => '',
+          ),
+      ),
+      'shortcode_popoverright' => array(
+          'variables' => array(
+              'text' => '',
+              'id' => '',
+          ),
+      ),
+      'shortcode_popoverbottom' => array(
+          'variables' => array(
+              'text' => '',
+              'id' => '',
+          ),
+      ),
+      'shortcode_popoverleft' => array(
+          'variables' => array(
+              'text' => '',
+              'id' => '',
+          ),
+      ),
+      // Wells
+      'shortcode_well' => array(
+          'variables' => array(
+              'text' => '',
+          ),
+      ),
+      'shortcode_well_large' => array(
+          'variables' => array(
+              'text' => '',
+          ),
+      ),
+      'shortcode_well_small' => array(
+          'variables' => array(
+              'text' => '',
+          ),
+      ),
+      //Panels
+      'shortcode_panel' => array(
+          'variables' => array(
+              'text' => '',
+              'heading' => '',
+              'style' => '',
+          ),
+      ),
+  );
+}
+
+
+include("inc/elements/tooltips.inc");
+include("inc/elements/popovers.inc");
+include("inc/elements/wells.inc");
+include("inc/elements/panels.inc");
+include("inc/elements/accordion.inc");
+include("inc/elements/alert.inc");
+include("inc/elements/carousels.inc");
+include("inc/elements/column.inc");
+include("inc/elements/tabs.inc");
+include("inc/elements/animate.inc");
+include("inc/elements/image.inc");
+;

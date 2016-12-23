@@ -1,0 +1,32 @@
+<?php
+function gavias_layerslider_install() {
+  $data_type = Database::getConnection()->databaseType();
+  switch ($data_type) {
+    case 'mysql':
+    case 'mysqli':
+      db_query("CREATE TABLE IF NOT EXISTS {gavias_slidergroups} (
+                `id` int(11) NOT NULL AUTO_INCREMENT,
+                `title` varchar(255) NOT NULL,
+                `params` longtext NOT NULL,
+                PRIMARY KEY (`id`)
+              ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+              ");
+
+      db_query("CREATE TABLE IF NOT EXISTS {gavias_sliderlayers} (
+                `id` int(11) NOT NULL AUTO_INCREMENT,
+                `title` varchar(255) NOT NULL,
+                `sort_index` int(11) NOT NULL,
+                `group_id` int(11) NOT NULL,
+                `params` longtext NOT NULL,
+                `layersparams` longtext NOT NULL,
+                `status` tinyint(1) NOT NULL,
+                `background_image_uri` text NOT NULL,
+                PRIMARY KEY (`id`),
+                KEY `id` (`id`)
+              ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 ;
+            ");
+      break;
+    case 'pgsql':
+      break;
+  }
+}

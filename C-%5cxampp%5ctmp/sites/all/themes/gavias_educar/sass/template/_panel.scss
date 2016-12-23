@@ -1,0 +1,24 @@
+/* ----------------------------------------------------
+   PANELS STYLES
+------------------------------------------------------- */
+.panel-separator{
+   margin: 0;
+   display: none!important;
+}
+.panels-flexible-region{
+   margin: 0;
+   padding: 0;
+   width: 100%;
+}
+.panels-container{
+   padding: 45px 0;
+}
+.hidden-header .view-header {display: none;}
+.hidden-footer .view-footer {display: none;}
+
+.gavias-bean{
+   padding-top: 30px;
+   .block{
+      margin-bottom: 0!important;
+   }
+}

@@ -1,0 +1,17 @@
+<?php
+/**
+ * @file
+ * Panelstyle for the Megadrupal theme.
+ */
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function gavias_panels_ctools_plugin_directory($module, $plugin) {
+    if ($module == 'panels' && $plugin == 'layouts') {
+        return 'layouts';
+    }
+    if ($module == 'panels' && $plugin == 'styles') {
+        return 'plugins/' . $plugin;
+    }
+}

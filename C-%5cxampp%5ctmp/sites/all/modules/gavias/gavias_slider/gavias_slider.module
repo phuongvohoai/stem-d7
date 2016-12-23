@@ -1,0 +1,404 @@
+<?php
+module_load_include('inc', 'gavias_slider', 'inc/model');
+
+function gavias_slider_menu() {
+    $items = array();
+    $items['admin/gavias_slider'] = array(
+        'title' => 'Gavias Slider',
+        'page callback' => 'gavias_slider_list',
+        'access arguments' => array('admin_gavias_slider'),
+        'type' => MENU_NORMAL_ITEM
+    );
+    $items['admin/gavias_slider/add'] = array(
+        'title' => 'Add Slide',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('gavias_slider_form'),
+        'access arguments' => array('admin_gavias_slider'),
+        'type' => MENU_LOCAL_ACTION,
+        'file' => 'inc/form.inc'
+    );
+    $items['admin/gavias_slider/%/edit'] = array(
+        'title' => 'Edit Slide',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('gavias_slider_form', 2),
+        'access arguments' => array('admin_gavias_slider'),
+        'type' => MENU_CALLBACK,
+        'file' => 'inc/form.inc'
+    );
+    $items['admin/gavias_slider/%/editslides'] = array(
+        'title' => 'Edit Slide',
+        'page callback' => 'gavias_slider_edit_sliders',
+        'page arguments' => array(2),
+        'access arguments' => array('admin_gavias_slider'),
+        'type' => MENU_LOCAL_ACTION,
+        'context' => MENU_CONTEXT_INLINE
+    );
+    $items['admin/gavias_slider/%/globalsettings'] = array(
+        'title' => 'Global Settings',
+        'page callback' => 'gavias_slider_global_settings',
+        'page arguments' => array(2),
+        'access arguments' => array('admin_gavias_slider'),
+        'type' => MENU_LOCAL_ACTION,
+        'context' => MENU_CONTEXT_INLINE
+    );
+    $items['admin/gavias_slider/%/delete'] = array(
+        'title' => 'Edit Slide',
+        'page callback' => 'gavias_slider_delete',
+        'page arguments' => array(2),
+        'access arguments' => array('admin_gavias_slider'),
+        'type' => MENU_CALLBACK,
+    );
+ 
+
+    $items['admin/gavias_slider/save'] = array(
+        'title' => 'Edit Slider',
+        'page callback' => 'gavias_slider_save',
+        'access arguments' => array('admin_gavias_slider'),
+        'type' => MENU_CALLBACK
+    );
+    $items['admin/gavias_slider/settings'] = array(
+        'title' => 'Settings',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('gavias_slider_settings_form'),
+        'access arguments' => array('admin_gavias_slider'),
+        'type' => MENU_NORMAL_ITEM
+    );
+
+    // To use local task menu items, there must be a parent page.
+    $items['contextual'] = array(
+        'title' => 'The contextual example page',
+        'page callback' => 'contextual_example_page',
+        'page arguments' => array(
+            1
+        ),
+        'access callback' => TRUE
+    );
+
+    return $items;
+}
+
+/**
+ * Implements hook_permission()
+ */
+function gavias_slider_permission() {
+    return array(
+        'admin_gavias_slider' => array(
+            'title' => t('Administer Gavias Slider'),
+        ),
+    );
+}
+
+function gavias_slider_settings_form() {
+    $form['gavias_slider_block_num'] = array(
+        '#type' => 'textfield',
+        '#title' => 'Number of blocks',
+        '#default_value' => variable_get('gavias_slider_block_num', 1)
+    );
+    return system_settings_form($form);
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function gavias_slider_block_info() {
+    $blocks = array();
+    $num = variable_get('gavias_slider_block_num', 1);
+    for ($i = 1; $i <= $num; $i++) {
+        $blocks['gavias_slider_block_' . $i] = array(
+            'info' => t('Gavias Slider Block ' . $i),
+            'cache' => DRUPAL_NO_CACHE
+        );
+    }
+    return $blocks;
+}
+
+/**
+ * Implements hook_block_configure().
+ */
+function gavias_slider_block_configure($delta = '') {
+    $form = array();
+
+    if (str_replace('gavias_slider_block_', '', $delta) != $delta) {
+        $results = $result = db_select('{gavias_slider}', 'd')->fields('d', array(
+                    'id',
+                    'name'
+                ))->execute();
+        $options = array('' => '-- Choose --');
+        foreach ($results as $row) {
+            $options[$row->id] = $row->name;
+        }
+        $num = str_replace('gavias_slider_block_', '', $delta);
+        $form['slide'] = array(
+            '#type' => 'select',
+            '#title' => t('Slideshow'),
+            '#options' => $options,
+            '#default_value' => variable_get('gavias_slider_block_slide_' . $num),
+            '#description' => t('Select slideshow.')
+        );
+    }
+    return $form;
+}
+
+/**
+ * Implements hook_block_save().
+ */
+function gavias_slider_block_save($delta = '', $edit = array()) {
+    if (str_replace('gavias_slider_block_', '', $delta) != $delta) {
+        $num = str_replace('gavias_slider_block_', '', $delta);
+        variable_set('gavias_slider_block_slide_' . $num, $edit['slide']);
+    }
+}
+
+function gavias_slider_block_view_alter(&$data, $block) {
+    if (str_replace('gavias_slider_block_', '', $block->delta) != $block->delta) {
+        $num = str_replace('gavias_slider_block_', '', $block->delta);
+        $sid = variable_get('gavias_slider_block_slide_' . $num);
+        $contextual_links = array('admin/gavias_slider', array($sid));
+        $data['content']['#contextual_links']['gavias_slider_edit'] = $contextual_links;
+    }
+}
+
+function gavias_slider_block_view($delta = '') {
+    $block = array();
+    if (str_replace('gavias_slider_block_', '', $delta) != $delta) {
+        $num = str_replace('gavias_slider_block_', '', $delta);
+        $slide = variable_get('gavias_slider_block_slide_' . $num);
+        $block['content'] = menu_tree($delta);
+        $block['content']['#markup'] = gavias_slider_block_content($slide);
+        $block['content']['#contextual_links']['menu'] = array('admin/structure/menu/manage', array($delta));
+    }
+    return $block;
+}
+
+function gavias_slider_block_content($sid) {
+    $slideshow = gavias_slider_load($sid);
+    if (!$slideshow)
+        return '<div class="text-center padding-tb-30"><b>No slider selected. Please select slider for block !</b></div>';
+	
+    $module_path = drupal_get_path('module', 'gavias_slider');
+    drupal_add_css($module_path . '/vendor/swiper/css/swiper.css');
+    drupal_add_js($module_path . '/vendor/swiper/js/swiper.jquery.js');
+    drupal_add_js($module_path . '/vendor/main.js');
+    
+    return theme('gavias_slider_slides', array(
+        'id' => $sid,
+        'slides' => $slideshow->slides,
+        'settings' => $slideshow->settings
+    ));
+}
+
+function gavias_slider_list() {
+    $header = array('ID', 'Name', 'Edit Slider', 'Global Settings', 'Delete');
+    $results = db_select('{gavias_slider}', 'd')
+            ->fields('d', array('id', 'name'))
+            ->execute();
+    $rows = array();
+    foreach ($results as $row) {
+        $row->name = l($row->name, 'admin/gavias_slider/' . $row->id . '/edit');
+        $row->edit = l('Edit Slider', 'admin/gavias_slider/' . $row->id . '/editslides');
+        $row->globalsettings = l('Global Settings', 'admin/gavias_slider/' . $row->id . '/globalsettings');
+        $row->delete = l('Delete', 'admin/gavias_slider/' . $row->id . '/delete');
+        $tmp = (array) $row;
+        $rows[] = $tmp;
+    }
+    return theme_table(array(
+        'header' => $header,
+        'rows' => $rows,
+        'attributes' => array(),
+        'caption' => '',
+        'colgroups' => array(),
+        'sticky' => false,
+        'empty' => t('No slider created yet.')
+    ));
+}
+
+function gavias_slider_edit_sliders($id) {
+    module_load_include('inc', 'gavias_slider', 'inc/functions');
+    include_once drupal_get_path('module', 'media') . '/wysiwyg_plugins/media.inc';
+    media_include_browser_js();
+    $module_path = drupal_get_path('module', 'gavias_slider');
+    drupal_add_library('system', 'ui.draggable');
+    drupal_add_library('system', 'ui.dropable');
+    drupal_add_library('system', 'ui.sortable');
+    drupal_add_library('system', 'ui.dialog');
+    drupal_add_library('system', 'ui.tabs');
+    drupal_add_css($module_path . '/assets/admin.css');
+    $slideshow = gavias_slider_load($id);
+    $url_redirect = isset($_GET['url_redirect']) ? $_GET['url_redirect'] : 'admin/gavias_slider/'.$id.'/editslides';
+    $url_redirect = url($url_redirect);
+    $js = 'var url_redirect = "' . $url_redirect . '";var $settings=' . json_encode($slideshow->settings) . ';var $slides = ' . json_encode($slideshow->slides) . '; var $currentSlide=0;';
+    drupal_add_js($js, 'inline');
+    drupal_add_js($module_path . '/assets/admin.js');
+    ob_start();
+    include 'templates/backend/slider.php';
+    $content = ob_get_clean();
+    return $content;
+}
+
+function gavias_slider_global_settings($id) {
+    module_load_include('inc', 'gavias_slider', 'inc/functions');
+    $module_path = drupal_get_path('module', 'gavias_slider');
+    include_once drupal_get_path('module', 'media') . '/wysiwyg_plugins/media.inc';
+    drupal_add_library('system', 'ui.draggable');
+    drupal_add_library('system', 'ui.dropable');
+    drupal_add_library('system', 'ui.sortable');
+    drupal_add_library('system', 'ui.dialog');
+    drupal_add_library('system', 'ui.tabs');
+    media_include_browser_js();
+    drupal_add_css($module_path . '/assets/admin.css');
+    $slideshow = gavias_slider_load($id);
+    $url_redirect = isset($_GET['url_redirect']) ? $_GET['url_redirect'] : 'admin/gavias_slider';
+    $url_redirect = url($url_redirect);
+    $js = 'var url_redirect = "' . $url_redirect . '";var $settings=' . json_encode($slideshow->settings) . ';var $slides = ' . json_encode($slideshow->slides) . '; var $currentSlide=0;';
+    drupal_add_js($js, 'inline');
+    drupal_add_js($module_path . '/assets/admin.js');
+    ob_start();
+    include 'templates/backend/global.php';
+    $content = ob_get_clean();
+    return $content;
+}
+
+function gavias_slider_delete($slideid) {
+    return drupal_get_form('gavias_slider_confirm_form');
+}
+
+function gavias_slider_confirm_form($form_state) {
+    $form = array();
+    $form['id'] = array(
+        '#type' => 'hidden',
+        '#default_value' => arg(2)
+    );
+    return confirm_form($form, 'Do you really want to detele this slide?', 'admin/gavias_slider', NULL, 'Delete', 'Cancel');
+}
+
+function gavias_slider_confirm_form_submit($form, &$form_state) {
+    $slideid = $form['id']['#value'];
+    db_delete('gavias_slider')
+            ->condition('id', $slideid)
+            ->execute();
+    drupal_set_message('The slide has been deleted');
+    drupal_goto('admin/gavias_slider');
+}
+
+function gavias_slider_save() {
+    header('Content-type: application/json');
+    $sid = $_REQUEST['sid'];
+    $data = $_REQUEST['data'];
+    $settings = $_REQUEST['settings'];
+    //print($sid);die();
+    db_update('{gavias_slider}')->fields(array(
+        'data' => $data,
+        'settings' => $settings
+    ))->condition('id', $sid, '=')->execute();
+    $result = array(
+        'data' => 'saved'
+    );
+    print json_encode($result);
+    exit(0);
+}
+
+/* Implements hook_theme(). */
+function gavias_slider_theme() {
+    $path = drupal_get_path('module', 'gavias_slider');
+    $themes['gavias_slider_slides'] = array(
+        'template' => 'slides',
+        'path' => $path . '/templates/frontend',
+        'pattern' => 'gavias_slider__',
+        'preprocess functions' => array(
+            'template_preprocess',
+            'gavias_slider_preprocess_slides',
+        ),
+        'variables' => array()
+    );
+    $themes['gavias_slider_slide'] = array(
+        'template' => 'slide',
+        'path' => $path . '/templates/frontend',
+        'pattern' => 'gavias_slide__',
+        'preprocess functions' => array(
+            'template_preprocess',
+            'gavias_slider_preprocess_slide',
+        ),
+        'variables' => array()
+    );
+
+    return $themes;
+}
+
+function gavias_slider_preprocess_slides(&$vars) {
+    $vars['theme_hook_suggestions'][] = 'gavias__slides';
+    $slides = $vars['slides'];
+    $settings = $vars['settings'];
+    $html_id = drupal_html_id('gavias-slider-'.$vars['id']);
+    $vars['id'] = $html_id;
+    $vars['attributes_array']['style'] = 'min-height: 350px';
+    $vars['attributes_array']['class'] = 'gavias-slider swiper-container first-el-true';
+    $vars['attributes_array']['data-height'] = (isset($settings->startheight) && $settings->startheight) ? $settings->startheight : '700';
+    $vars['attributes_array']['data-fullheight'] = (isset($settings->fullheight) && $settings->fullheight) ? $settings->fullheight : 'fasle';
+    $vars['attributes_array']['data-pause'] = (isset($settings->autoslide) && $settings->autoslide) ? $settings->autoslide : '7000';
+   
+    $vars['content'] = '';
+    if($slides){
+        foreach ($slides as $slide) {
+            $vars['content'] .= theme('gavias_slider_slide', array(
+                'slide' => $slide,
+            ));
+        }
+    }
+}
+
+function gavias_slider_preprocess_slide(&$vars) {
+    $slide = $vars['slide'];
+    $var['slide'] = $slide;
+    $vars['attributes_array']['class'] = 'swiper-slide center_center swiper-slide-duplicate';
+    
+    $vars['attributes_array']['data-time'] = '6000';
+
+    $caption_attr['class'] = 'tp-caption';
+    
+    //Caption title
+    if(isset($slide->caption_title_fs) && $slide->caption_title_fs){
+        $caption_attr['caption_title_fs'] = $slide->caption_title_fs . 'px';
+    }else{
+        $caption_attr['caption_title_fs'] = '30px';
+    }  
+
+    if(isset($slide->caption_title_ls) && $slide->caption_title_ls){
+        $caption_attr['caption_title_ls'] = $slide->caption_title_ls . 'px';
+    }else{
+        $caption_attr['caption_title_ls'] = '0px';
+    }  
+
+    if(isset($slide->caption_title_fw) && $slide->caption_title_fw){
+        $caption_attr['caption_title_fw'] = $slide->caption_title_fw;
+    }else{
+        $caption_attr['caption_title_fw'] = '700';
+    }  
+
+    if(isset($slide->caption_skin) && $slide->caption_skin){
+        $caption_attr['caption_skin'] = $slide->caption_skin;
+    }else{
+        $caption_attr['caption_skin'] = 'white';
+    } 
+
+    if(isset($slide->caption_skin_custom) && $slide->caption_skin_custom){
+        $caption_attr['caption_skin_custom'] = $slide->caption_skin_custom;
+    }else{
+        $caption_attr['caption_skin_custom'] = '#FFF';
+    }
+
+    $vars['caption_attrs'] = $caption_attr;
+
+    $style[] = '';
+
+    if($slide->background_image_uri){
+        $wrapper = file_stream_wrapper_get_instance_by_uri($slide->background_image_uri);
+       
+        $path = base_path() .  $wrapper->getDirectoryPath() . "/" . file_uri_target($slide->background_image_uri);
+        $style[] = "background-image: url('{$path}');";
+    }
+
+    $style[] = 'background-color: #ccc;'; 
+    if($slide->background_image){
+        $vars['image'] = implode( $style, '');
+    }
+}

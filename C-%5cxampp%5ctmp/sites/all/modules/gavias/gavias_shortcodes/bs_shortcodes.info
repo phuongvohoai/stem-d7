@@ -1,0 +1,11 @@
+name = Gavivas Shortcode 
+description = Shortcode Bootstrap Functionality
+package = gavias
+core = 7.x
+version = "7.x-1.0"
+dependencies[] = filter
+dependencies[] = shortcode
+
+
+
+

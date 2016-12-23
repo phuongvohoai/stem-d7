@@ -1,0 +1,169 @@
+    .navigation .g_menu > li > a:hover,
+    .header-fixed #header.gv-fixonscroll.gv-fixed .tb-megamenu .nav-collapse ul.nav > li > a:hover,
+    .footer a:hover,
+    .copyright .copyright-inner a,
+    .blog-single-post .post-meta > span a:hover,
+    .post-block .post-meta a:hover,
+    .view-home-blog .grid-inner .meta .entry-title a:hover,
+    .view-home-blog .grid-inner .meta .entry-date,
+    .view-home-blog-v2 .meta .entry-title a:hover,
+    .gallery-teaser-display .post-block .post-content a:hover,
+    .style-dark .post-block .post-title a:hover,
+    .main-slideshow .caption .post-title a:hover,
+    .list-highlight-post .view-list ul li .post-block .post-meta-wrap * a:hover,
+    .text-theme,
+    .list-1 li i,
+    ul.icons-list li i,
+    .service-button a,
+    .icon-small:hover,
+    .service-box:hover .icon-small,
+    .icon-medium:hover,
+    .service-box:hover .icon-medium,
+    .icon-large:hover,
+    .service-box:hover .icon-large,
+    .icon-effect-1:hover, 
+    .service-box:hover .icon-effect-1,
+    .icon-effect-2,
+    .icon-effect-3, .icon-effect-4, .icon-effect-5, .icon-effect-6,
+    .nav-tabs > li > a:hover, .nav-tabs > li > a:focus,
+    .nav-theme > li > a:hover, .nav-theme > li > a:focus, .nav-theme > li > a:active,
+    .nav-theme > li > a.active,
+    .nav-theme > li.active > a,
+    .block .block-title span,
+    .block .special-title .title,
+    .block.style-higlight .more-link a:hover,
+    .navigation .g_menu > li > a:hover,
+    .view-list-content .views-row .views-field-title a:hover,
+    .view-portfolio .portfolio-v2.isotope-item a:hover,
+    .view-gallery .item-x .xcolor i,
+    .product-single-content .product-detail .product-price,
+    .event-item-grid .grid-inner .event-bottom i,
+    a:hover, a:focus,
+    .text-primary,
+    .btn-primary .badge,
+    .btn-link:hover, .btn-link:focus,
+    .pagination > li > a:hover, .pagination > li > a:focus,
+    .pagination > li > span:hover,
+    .pagination > li > span:focus,
+    .panel-primary > .panel-heading .badge
+    {
+      color: #f80c24!important;
+    }
+
+    .pager .paginations a.active,
+    .node-teaser-display .field-type-taxonomy-term-reference .field-items > .field-item,
+    .view-home-blog-v2 .meta,
+    .team-item .team-content .team-social a:hover,
+    .nav-tabs > li.active > a,
+    .btn-outline,
+    .btn-outline:hover,
+    .navigation .g_menu > li > .sub-menu,
+    .gavias-slider .btn-slide.btn-slide-flat,
+    .spinner-blue, .spinner-blue-only,
+    .pagination > .active > a, .pagination > .active > a:hover, .pagination > .active > a:focus,
+    .pagination > .active > span,
+    .pagination > .active > span:hover,
+    .pagination > .active > span:focus,
+    .list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus,
+    .panel-primary, .panel-primary > .panel-heading,
+    .panel-primary > .panel-heading + .panel-collapse > .panel-body,
+    .panel-primary > .panel-footer + .panel-collapse > .panel-body 
+    {
+      border-color: #f80c24!important;
+    }
+
+    .pager .paginations a.active,
+    .post-author h3:after,
+    .node-teaser-display .field-type-taxonomy-term-reference .field-items > .field-item:hover, .node-teaser-display .field-type-taxonomy-term-reference .field-items > .field-item:focus, .node-teaser-display .field-type-taxonomy-term-reference .field-items > .field-item:active,
+    .team-item .team-content .team-social a:hover,
+    .icon-effect-1:after,
+    .icon-effect-2:after,
+    .milestone-block .milestone-icon,
+    .milestone-block .milestone-icon:after,
+    .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus,
+    .portfolio-filter .nav-tabs > li > a:hover, .portfolio-filter .nav-tabs > li > a:focus, .portfolio-filter .nav-tabs > li > a:active,
+    .portfolio-filter .nav-tabs > li > a.active,
+    .btn-system,
+    .button-hover:hover,
+    .btn-outline:hover,
+    .owl-carousel .owl-buttons > div:hover,
+    #comments h3:after,
+    .block.block-v2 .block-title span:after,
+    .sidebar .block .block-title:after,
+    .show-case .item .highlight-icon i:after,
+    .list-tags .view-list ul > li:hover,
+    .poll .bar .foreground,
+    .gavias-slider .btn-slide.btn-slide-flat,
+    .event-item-list .list-inner .event-date:after,
+    .calendar-calendar .month-view table.full .single-day td.today .inner:after,
+    .page-event-month .inner .item .calendar.monthview,
+    .page-event-month .inner .item .calendar.monthview .contents,
+    .gavias-skins-panel .control-panel,
+    .gavias-skins-panel .panel-skins-content .layout.active,
+    .bg-primary,
+    .btn-primary.disabled, .btn-primary.disabled:hover, .btn-primary.disabled:focus, .btn-primary.disabled:active, .btn-primary.disabled.active, .btn-primary[disabled], .btn-primary[disabled]:hover, .btn-primary[disabled]:focus, .btn-primary[disabled]:active, .btn-primary[disabled].active, fieldset[disabled] .btn-primary, fieldset[disabled] .btn-primary:hover, fieldset[disabled] .btn-primary:focus, fieldset[disabled] .btn-primary:active, fieldset[disabled] .btn-primary.active,
+    .dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus,
+    .nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus,
+    .pagination > .active > a, .pagination > .active > a:hover, .pagination > .active > a:focus,
+    .pagination > .active > span,
+    .pagination > .active > span:hover,
+    .pagination > .active > span:focus,
+    .label-primary,.progress-bar,
+    .list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus,
+    .panel-primary > .panel-heading
+    {
+      background-color: #f80c24!important;
+    }
+
+    body{
+        color: #220202;
+    }
+
+    body a{
+        color: #1b3b95!important;
+    }
+    body a:hover{
+        color: #9f1d61!important;
+    }
+
+        header#header{
+        background: #440303!important;
+    }
+
+    .navigation .g_menu > li > a{
+        color: #ffffff!important; 
+    }
+
+    .navigation .g_menu > li > a:hover{
+        color: #7c0505!important; 
+    }
+
+    .navigation .g_menu .megamenu > .sub-menu{
+        background: #260e0e!important;
+        color: #da1a1a!important;
+    }
+
+    .navigation .g_menu .megamenu > .sub-menu a{
+        color: #222222!important;
+    }
+    
+    .navigation .g_menu .megamenu > .sub-menu a:hover{
+        color: #7e0a0a!important;
+    }
+
+        .footer{
+        background: #180606!important;
+        color: #eb1010 !important;
+    }
+
+    .footer ul.menu > li a::after, .footer a{
+        color: #b63737!important;
+    }
+
+    .footer a:hover{
+        color: #a9a9a9 !important;
+    }
+
+
+
+

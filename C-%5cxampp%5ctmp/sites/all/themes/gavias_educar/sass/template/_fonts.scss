@@ -1,0 +1,54 @@
+$theme-font-path : "../fonts/"!default;
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Montserrat-Regular'), url(https://fonts.gstatic.com/s/montserrat/v6/zhcz-_WihjSQC0oHJ9TCYPk_vArhqVIZ0nv9q090hN8.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Montserrat-Bold'), url(https://fonts.gstatic.com/s/montserrat/v6/IQHow_FEYlDC4Gzy_m8fcoWiMMZ7xLd792ULpGE4W_Y.woff2) format('woff2');
+}
+
+@font-face { 
+  font-family: 'brandon'; 
+  font-style: normal;
+  font-weight: 300;
+  src: url('#{$theme-font-path}brandon-grotesque/BrandonGrotesque-Light.eot') format('eot'),
+    url('#{$theme-font-path}brandon-grotesque/BrandonGrotesque-Light.otf') format('opentype'),
+    url('#{$theme-font-path}brandon-grotesque/BrandonGrotesque-Light.woff') format('woff'), 
+    url('#{$theme-font-path}brandon-grotesque/BrandonGrotesque-Light.ttf') format('truetype'),
+    url('#{$theme-font-path}brandon-grotesque/BrandonGrotesque-Light.svg#BrandonGrotesque-Light') format('svg'); 
+}
+@font-face { 
+  font-family: 'brandon'; 
+  font-style: normal;
+  font-weight: 400;
+  src: url('#{$theme-font-path}brandon-grotesque/BrandonGrotesque-Regular.eot') format('eot'),
+    url('#{$theme-font-path}brandon-grotesque/BrandonGrotesque-Regular.otf') format('opentype'),
+    url('#{$theme-font-path}brandon-grotesque/BrandonGrotesque-Regular.woff') format('woff'), 
+    url('#{$theme-font-path}brandon-grotesque/BrandonGrotesque-Regular.ttf') format('truetype'),
+    url('#{$theme-font-path}brandon-grotesque/BrandonGrotesque-Regular.svg#BrandonGrotesque-Regular') format('svg'); 
+}
+@font-face { 
+  font-family: 'brandon'; 
+  font-style: normal;
+  font-weight: 700;
+  src: url('#{$theme-font-path}brandon-grotesque/BrandonGrotesque-Bold.eot') format('eot'),
+    url('#{$theme-font-path}brandon-grotesque/BrandonGrotesque-Bold.otf') format('opentype'),
+    url('#{$theme-font-path}brandon-grotesque/BrandonGrotesque-Bold.woff') format('woff'), 
+    url('#{$theme-font-path}brandon-grotesque/BrandonGrotesque-Bold.ttf') format('truetype'),
+    url('#{$theme-font-path}brandon-grotesque/BrandonGrotesque-Bold.svg#BrandonGrotesque-Bold') format('svg'); 
+}
+@font-face { 
+  font-family: 'brandon'; 
+  font-style: normal;
+  font-weight: 900;
+  src: url('#{$theme-font-path}brandon-grotesque/BrandonGrotesque-Black.eot') format('eot'),
+    url('#{$theme-font-path}brandon-grotesque/BrandonGrotesque-Black.otf') format('opentype'),
+    url('#{$theme-font-path}brandon-grotesque/BrandonGrotesque-Black.woff') format('woff'), 
+    url('#{$theme-font-path}brandon-grotesque/BrandonGrotesque-Black.ttf') format('truetype'),
+    url('#{$theme-font-path}brandon-grotesque/BrandonGrotesque-Black.svg#BrandonGrotesque-Black') format('svg'); 
+}

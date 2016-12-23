@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Gavias Educar Testimonial Team Features feature.
+ */
+
+include_once 'gavias_educar_testimonial_team_features.features.inc';

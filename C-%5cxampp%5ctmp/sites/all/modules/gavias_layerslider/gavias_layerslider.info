@@ -1,0 +1,11 @@
+name = Gavias Layer Slider
+description = "Layer Slider module base on Slider Revolution Responsive jQuery plugin."
+dependencies[] = jquery_update
+dependencies[] = libraries
+dependencies[] = media
+package = gavias
+core = 7.x
+version = "7.x-1.0"
+core = "7.x"
+project = "gavias"
+datestamp = "1371639600"

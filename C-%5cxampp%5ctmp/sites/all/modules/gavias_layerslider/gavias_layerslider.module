@@ -1,0 +1,578 @@
+<?php
+module_load_include('inc','gavias_layerslider','includes/model');
+/* Implement hook_menu */
+function gavias_layerslider_menu() {
+  $items = array();
+$module_path = drupal_get_path('module', 'gavias_layerslider');
+
+// ========== Slider group ================
+  $items['admin/gavias_slidergroups'] = array(
+      'title' => 'Gavias Sliderlayer',
+      'page callback' => 'gavias_slidergroups_list',
+      'access arguments' => array('administer gaviaslayerslider'),
+      'type' => MENU_NORMAL_ITEM
+  );
+
+  $items['admin/gavias_slidergroups/add'] = array(
+      'title' => 'Add Slider Groups',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('gavias_slidergroups_form'),
+      'access arguments' => array('administer gaviaslayerslider'),
+      'type' => MENU_LOCAL_ACTION,
+      'file' => 'includes/form/group.php'
+  );
+
+  $items['admin/gavias_slidergroups/%/edit'] = array(
+      'title' => 'Edit Slider',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('gavias_slidergroups_form', 2),
+      'access arguments' => array('administer gaviaslayerslider'),
+      'type' => MENU_CALLBACK,
+      'file' => 'includes/form/group.php'
+  );
+
+  $items['admin/gavias_slidergroups/%/delete'] = array(
+      'title' => 'Delete Group Slider',
+      'page callback' => 'gavias_slidergroups_delete',
+      'page arguments' => array(2),
+      'access arguments' => array('administer gaviaslayerslider'),
+      'type' => MENU_CALLBACK,
+      'file' => 'includes/form/group.php'
+  );
+
+  $items['admin/gavias_slidergroups/%/config'] = array(
+      'title' => 'Edit Slider',
+      'page callback' => 'gavias_slidergroups_config',
+      'page arguments' => array(2),
+      'access arguments' => array('administer gaviaslayerslider'),
+      'type' => MENU_NORMAL_ITEM,
+      'file' => 'includes/form/group.php'
+  );
+  $items['admin/gavias_slidergroups/config/save'] = array(
+      'title' => 'Edit Slider',
+      'page callback' => 'gavias_slidergroups_config_save',
+      'access arguments' => array('administer gaviaslayerslider'),
+      'type' => MENU_CALLBACK,
+      'file' => 'includes/form/group.php'
+  );
+
+  //============= Layer siders ===================
+  $items['admin/gavias_layerslider/sliders/%'] = array(
+      'title' => t('List Sliderlayer'),
+      'page callback' => 'gavias_layerslider_list',
+      'page arguments' => array(2),
+      'access arguments' => array('administer gaviaslayerslider'),
+      'type' => MENU_NORMAL_ITEM
+  );
+  $items['admin/gavias_layerslider/sliders/%/add'] = array(
+      'title' => 'Add Slide',
+      'page callback' => 'gavias_layerslider_form',
+      'page arguments' => array(2,5),
+      'access arguments' => array('administer gaviaslayerslider'),
+      'type' => MENU_LOCAL_ACTION,
+      'file' => 'includes/form/slider.php'
+  );
+  $items['admin/gavias_layerslider/sliders/%/edit/%'] = array(
+      'title' => 'Edit Slide',
+      'page callback' => 'gavias_layerslider_form',
+      'page arguments' => array(3, 5),
+      'access arguments' => array('administer gaviaslayerslider'),
+      'type' => MENU_LOCAL_ACTION,
+      'context' => MENU_CONTEXT_INLINE,
+      'file' => 'includes/form/slider.php'
+  );
+
+  $items['admin/gavias_layerslider/sliders/%/delete/%'] = array(
+      'title' => 'Delete Slider',
+      'page callback' => 'gavias_sliderlayers_delete',
+      'page arguments' => array(3,5),
+      'access arguments' => array('administer gaviaslayerslider'),
+      'type' => MENU_CALLBACK,
+      'file' => 'includes/form/slider.php'
+  );
+
+  $items['admin/gavias_layerslider/save'] = array(
+      'title' => 'Edit Slider',
+      'page callback' => 'gavias_layerslider_save',
+      'page arguments' => array(2),
+      'access arguments' => array('administer gaviaslayerslider'),
+      'type' => MENU_CALLBACK,
+      'file' => 'includes/form/slider.php'
+  );
+
+  //================ Import - Export =========================
+  $items['admin/gavias_slidergroups/%/export'] = array(
+      'title' => 'Export Slide',
+      'page callback' => 'gavias_layerslider_export',
+      'page arguments' => array(2),
+      'access arguments' => array('administer gaviaslayerslider'),
+      'type' => MENU_LOCAL_ACTION,
+      'context' => MENU_CONTEXT_INLINE,
+      'file' => 'includes/export.inc',
+  );
+  $items['admin/gavias_slidergroups/import'] = array(
+      'title' => 'Import Slide',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('gavias_layerslider_import_form'),
+      'access arguments' => array('administer gaviaslayerslider'),
+      'type' => MENU_LOCAL_ACTION,
+      'file' => 'includes/import.inc',
+  );
+
+  $items['admin/gavias_slidergroups/settings'] = array(
+      'title' => 'Settings',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('gavias_layerslider_settings_form'),
+      'access arguments' => array('administer gaviaslayerslider'),
+      'type' => MENU_NORMAL_ITEM
+  );
+
+  $items['contextual'] = array(
+      'title' => 'The contextual example page',
+      'page callback' => 'contextual_example_page',
+      'page arguments' => array(1),
+      'access callback' => TRUE
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission()
+ */
+
+function gavias_layerslider_permission() {
+  return array(
+    'administer gaviaslayerslider' =>  array(
+      'title' => t('Administer Gavias LayerSlider'),
+      'description' => t('Administer Gavias LayerSlider.'),
+    ),
+  );
+}
+
+function gavias_layerslider_settings_form() {
+  $form['gavias_layerslider_block_num'] = array(
+      '#type' => 'textfield',
+      '#title' => 'Number of blocks',
+      '#default_value' => variable_get('gavias_layerslider_block_num', 3)
+  );
+  return system_settings_form($form);
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function gavias_layerslider_block_info() {
+  $blocks = array();
+  $num = variable_get('gavias_layerslider_block_num', 3);
+  for ($i = 1; $i <= $num; $i++) {
+    $blocks['gavias_layerslider_block_' . $i] = array(
+        'info' => t('Layer Slider block ' . $i),
+        'cache' => DRUPAL_NO_CACHE
+    );
+  }
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_configure().
+ */
+function gavias_layerslider_block_configure($delta = '') {
+  $form = array();
+
+  if (str_replace('gavias_layerslider_block_', '', $delta) != $delta) {
+    $results = $result = db_select('{gavias_slidergroups}', 'd')->fields('d', array(
+                'id',
+                'title'
+            ))->execute();
+    $options = array();
+    foreach ($results as $row) {
+      $options[$row->id] = $row->title;
+    }
+    $num = str_replace('gavias_layerslider_block_', '', $delta);
+    $form['slide'] = array(
+        '#type' => 'select',
+        '#title' => t('Slideshow'),
+        '#options' => $options,
+        '#default_value' => variable_get('gavias_layerslider_block_slide_' . $num),
+        '#description' => t('Select slideshow.')
+    );
+  }
+  return $form;
+}
+
+/**
+ * Implements hook_block_save().
+ */
+function gavias_layerslider_block_save($delta = '', $edit = array()) {
+  if (str_replace('gavias_layerslider_block_', '', $delta) != $delta) {
+    $num = str_replace('gavias_layerslider_block_', '', $delta);
+    variable_set('gavias_layerslider_block_slide_' . $num, $edit['slide']);
+  }
+}
+
+function gavias_layerslider_block_view_alter(&$data, $block) {
+  if (str_replace('gavias_layerslider_block_', '', $block->delta) != $block->delta) {
+    $num = str_replace('gavias_layerslider_block_', '', $block->delta);
+    $sid = variable_get('gavias_layerslider_block_slide_' . $num);
+    $contextual_links = array('admin/gavias_layerslider', array($sid));
+    $data['content']['#contextual_links']['gavias_layerslider_edit'] = $contextual_links;
+  }
+}
+
+function gavias_layerslider_block_view($delta = '') {
+  $block = array();
+  if (str_replace('gavias_layerslider_block_', '', $delta) != $delta) {
+    $num = str_replace('gavias_layerslider_block_', '', $delta);
+    $slide = variable_get('gavias_layerslider_block_slide_' . $num);
+    $block['content'] = menu_tree($delta);
+    $block['content']['#markup'] = gavias_layerslider_block_content($slide);
+    $block['content']['#contextual_links']['menu'] = array('admin/structure/menu/manage', array($delta));
+  }
+  return $block;
+}
+
+function gavias_layerslider_block_content($sid) {
+	$slideshow = gavias_slider_load_frontend($sid);
+  global $base_url;
+  if(!$slideshow) return 'No slider selected';
+  $module_path = drupal_get_path('module', 'gavias_layerslider');
+  drupal_add_js($module_path.'/vendor/revolution/js/jquery.themepunch.revolution.min.js');
+  drupal_add_js($module_path.'/vendor/revolution/js/jquery.themepunch.tools.min.js');
+  drupal_add_js($module_path.'/vendor/revolution/js/jquery.themepunch.enablelog.js');
+  drupal_add_css($module_path.'/vendor/revolution/css/settings.css');
+  drupal_add_css($module_path.'/vendor/revolution/css/layers.css');
+  drupal_add_css($module_path.'/vendor/revolution/css/navigation.css');
+  //Setting 
+  $settings = $slideshow->settings;
+  $ss = new stdClass();
+  $ss->delay = isset($settings->delay) ? $settings->delay : 9000;
+  $ss->gridheight = isset($settings->gridheight) ? $settings->gridheight : 600;
+  $ss->gridwidth = isset($settings->gridwidth) ? $settings->gridwidth : 1170;
+  $ss->minHeight = isset($settings->minheight) ? $settings->minheight : 0;
+  $ss->autoHeight = 'off';
+  $ss->sliderType = "standard";
+  $ss->sliderLayout = isset($settings->sliderlayout) ? $settings->sliderlayout : 'auto';  // auto, fullwidth, fullscreen      
+  $ss->fullScreenAutoWidth="on";       
+  $ss->fullScreenAlignForce="off";
+  $ss->fullScreenOffsetContainer="";      
+  $ss->fullScreenOffset="0";
+  $ss->hideCaptionAtLimit=0;               
+  $ss->hideAllCaptionAtLimit=0;            
+  $ss->hideSliderAtLimit=0;                                    
+  $ss->disableProgressBar="off";           
+  $ss->stopAtSlide=-1;                    
+  $ss->stopAfterLoops=-1;                  
+  $ss->shadow= isset($settings->shadow) ? $settings->shadow : 0;                       
+  $ss->dottedOverlay = isset($settings->dottedOverlay) ? $settings->dottedOverlay : 'none';        
+  $ss->startDelay=0;                                
+  $ss->lazyType = "smart";                
+  $ss->spinner="spinner0";
+  $ss->shuffle="off";    
+
+  $ss->navigation = new stdClass();
+
+  $ss->navigation->onHoverStop = isset($settings->onhoverstop) ? $settings->onhoverstop : 'on';
+
+  $ss->navigation->touch = new stdClass();
+  $ss->navigation->touch->touchenabled = 'on';
+
+  $ss->navigation->arrows = new stdClass();
+  $ss->navigation->arrows->enable = isset($settings->arrow_enable) ? $settings->arrow_enable : true;
+
+  $ss->navigation->arrows->left = new stdClass();
+  $ss->navigation->arrows->left->h_align = isset($settings->navigationLeftHAlign) ? $settings->navigationLeftHAlign : 'left';
+  $ss->navigation->arrows->left->v_align = isset($settings->navigationLeftVAlign) ? $settings->navigationLeftVAlign : 'center';
+  $ss->navigation->arrows->left->h_offset = isset($settings->navigationLeftHOffset) ? (int)$settings->navigationLeftHOffset : 0;
+  $ss->navigation->arrows->left->v_offset = isset($settings->navigationLeftVOffset) ? (int)$settings->navigationLeftVOffset : 20;
+
+  $ss->navigation->arrows->right = new stdClass();
+  $ss->navigation->arrows->right->h_align = isset($settings->navigationRightHAlign) ? $settings->navigationRightHAlign : 'right';
+  $ss->navigation->arrows->right->v_align = isset($settings->navigationRightVAlign) ? $settings->navigationRightVAlign : 'center';
+  $ss->navigation->arrows->right->h_offset = isset($settings->navigationRightHOffset) ? (int)$settings->navigationRightHOffset : 0;
+  $ss->navigation->arrows->right->v_offset = isset($settings->navigationRightVOffset) ? (int)$settings->navigationRightVOffset : 20;
+
+  $ss->navigation->bullets = new stdClass();
+  $ss->navigation->bullets->enable = isset($settings->bullets_enable) ? $settings->bullets_enable : true;
+  $ss->navigation->bullets->v_align = 'bottom';
+  $ss->navigation->bullets->h_align = 'center';
+  $ss->navigation->bullets->v_offset = 20;
+  $ss->navigation->bullets->tmp = '';
+
+  if(variable_get('preprocess_js') == 1){
+  $module_path = drupal_get_path('module', 'gavias_layerslider');
+  $ss->extensions = $base_url . '/' . $module_path . '/vendor/revolution/js/extensions/';
+  }  
+  $ss = json_encode($ss);
+	return theme('gavias_layerslider_slides', array(
+    'id'        => $sid,
+    'slides'    => $slideshow->slides,
+    'settings'  => $slideshow->settings,
+    'scount'    => count($slideshow->slides),
+    'ss'        => $ss
+  ));
+}
+
+function gavias_slidergroups_list() {
+  $header = array( 'ID', 'Name', 'Sliders','Settings', 'Action');
+  $results = db_select('{gavias_slidergroups}', 'd')
+          ->fields('d', array('id', 'title'))
+          ->execute();
+  $rows = array();
+  foreach ($results as $row) {
+    $tmp =  array();
+    $tmp[] = $row->id;
+    $tmp[] = l($row->title, 'admin/gavias_slidergroups/' . $row->id . '/edit');
+    $tmp[] = l('List slides', 'admin/gavias_layerslider/sliders/' . $row->id );
+    $tmp[] = l('Settings', 'admin/gavias_slidergroups/' . $row->id . '/config');
+    $tmp[] = l('Edit slides', 'admin/gavias_slidergroups/' . $row->id . '/edit') . ' | ' . l('Export', 'admin/gavias_slidergroups/' . $row->id.'/export') . ' | ' . l('Delete', 'admin/gavias_slidergroups/' . $row->id . '/delete');
+    $rows[] = $tmp;
+  }
+  return theme_table(array(
+      'header' => $header,
+      'rows' => $rows,
+      'attributes' => array(),
+      'caption' => '',
+      'colgroups' => array(),
+      'sticky' => false,
+      'empty' => t('No slider created yet.')
+  ));
+}
+
+function gavias_layerslider_list($groupid=0){
+  $groupid = arg(3);
+  $header = array( 'ID', 'Sort Index', 'Name', 'Action');
+  $results = db_select('{gavias_sliderlayers}', 'd')
+          ->fields('d', array('id','sort_index', 'title', 'group_id'))
+          ->condition('group_id', $groupid, '=')
+          ->orderBy('sort_index', 'DESC')
+          ->execute();
+  $rows = array();
+  foreach ($results as $row) {
+    $tmp =  array();
+    $tmp[] = $row->id;
+    $tmp[] = $row->sort_index;
+    $tmp[] = l($row->title, 'admin/gavias_layerslider/sliders/' . $row->group_id . '/edit/'. $row->id);
+    $tmp[] = l('Edit', 'admin/gavias_layerslider/sliders/' . $row->group_id . '/edit/'. $row->id) .' | '. l('Delete', 'admin/gavias_layerslider/sliders/' . $row->group_id . '/delete/'. $row->id);
+    $rows[] = $tmp;
+  }
+  return theme_table(array(
+    'header' => $header,
+    'rows' => $rows,
+    'attributes' => array(),
+    'caption' => '',
+    'colgroups' => array(),
+    'sticky' => false,
+    'empty' => t('No slider created yet.')
+  ));
+}
+
+function gavias_layerslider_delete($slideid) {
+  return drupal_get_form('gavias_layerslider_confirm_form');
+}
+
+function gavias_layerslider_confirm_form($form_state) {
+  $form = array();
+  $form['id'] = array(
+    '#type'=>'hidden',
+    '#default_value' => arg(2)
+  );
+  return confirm_form($form, 'Do you really want to detele this slide?', 'admin/gavias_layerslider', NULL, 'Delete', 'Cancel');
+}
+
+function gavias_layerslider_confirm_form_submit($form, &$form_state){
+  $slideid = $form['id']['#value'];
+  db_delete('gavias_layerslider')
+          ->condition('id', $slideid)
+          ->execute();
+  drupal_set_message('The slide has been deleted');
+  drupal_goto('admin/gavias_layerslider');
+}
+
+/* Implements hook_theme(). */
+function gavias_layerslider_theme() {
+	$path = drupal_get_path('module', 'gavias_layerslider');
+  $themes['gavias_layerslider_slides'] = array(
+      'template' => 'slides',
+      'path' => $path . '/templates/frontend',
+      'pattern' => 'layerslider__',
+      'preprocess functions' => array(
+          'template_preprocess',
+          'gavias_layerslider_preprocess_slides',
+      ),
+      'variables' => array()
+  );
+	$themes['gavias_layerslider_slide'] = array(
+      'template' => 'slide',
+      'path' => $path . '/templates/frontend',
+      'pattern' => 'layerslider__',
+      'preprocess functions' => array(
+          'template_preprocess',
+          'gavias_layerslider_preprocess_slide',
+      ),
+      'variables' => array()
+  );
+	$themes['gavias_layerslider_layer'] = array(
+      'template' => 'layer',
+      'path' => $path . '/templates/frontend',
+      'pattern' => 'layerslider__',
+      'preprocess functions' => array(
+          'template_preprocess',
+          'gavias_layerslider_preprocess_layer',
+      ),
+      'variables' => array()
+  );
+	return $themes;
+}
+
+function gavias_layerslider_preprocess_slides(&$vars){
+  global $base_url;
+  $vars['theme_hook_suggestions'][] = 'layerslider__slides';
+  $slides = $vars['slides'];
+  $scount = $vars['scount'];
+	$settings = $vars['settings'];
+	$vars['attributes_array']['class'][] = 'gavias_layerslider rev_slider_wrapper';
+  $vars['classes_array'][] = 'gavias_layerslider rev_slider_wrapper';
+  $style = array();
+  $style[] = 'height:'.$settings->gridheight . 'px';
+	$vars['attributes_array']['style'] = implode($style, ';');
+  
+	$vars['content'] = '';
+	foreach($slides as $slide){
+		$vars['content'] .= theme('gavias_layerslider_slide',array(
+			'slide' => $slide,
+      'scount' => $scount,
+      'settings'  => $settings
+    ));
+	}
+}
+
+function gavias_layerslider_preprocess_slide(&$vars){
+  $module_path = drupal_get_path('module', 'gavias_layerslider');
+	$slide = $vars['slide'];
+	$layers = $slide->layers;
+  $scount =  $vars['scount'];
+  $settings = $vars['settings'];
+	$vars['attributes_array']['data-transition'] = $slide->data_transition;
+  $vars['attributes_array']['data-easein'] = $slide->slide_easing_in;
+  $vars['attributes_array']['data-easeout'] = $slide->slide_easing_out;
+  $vars['attributes_array']['data-slotamount'] = 7;
+  if(isset($slide->overlay_enable) && $slide->overlay_enable=='on'){
+    $vars['attributes_array']['class'][] = 'gavias-overlay';
+    $vars['classes_array'][] = 'gavias-overlay';
+  }
+	if($slide->background_image){
+    $vars['content'] = "<img src=\"{$slide->background_image}\" alt=\"\" data-bgrepeat=\"{$slide->background_repeat}\" style=\"background-color:{$slide->background_color}\" data-bgfit=\"{$slide->background_fit}\" data-bgposition=\"{$slide->background_position}\" />";
+  }else{
+    $vars['content'] = "<img src=\"{$module_path}/vendor/revolution/assets/transparent.png\" data-bgrepeat=\"repeat\" style=\"background-color:{$slide->background_color}\" />";
+  }
+  $zindex = count($layers) + 1;
+	foreach($layers as $layer){
+		$vars['content'] .= theme('gavias_layerslider_layer',array(
+			'layer' => $layer,
+      'zindex' => $zindex--,
+      'scount' => $scount,
+      'settings'  => $settings
+		));
+	}
+}
+
+function gavias_layerslider_preprocess_layer(&$vars){
+  global $base_url;
+  $module_path = drupal_get_path('module', 'gavias_layerslider');
+  module_load_include('php','gavias_layerslider','includes/utilities');
+	$layer = $vars['layer'];
+  $scount = $vars['scount'];
+  $settings = $vars['settings'];
+	$vars['attributes_array']['class'][] = 'tp-caption';
+  $vars['classes_array'][] = 'tp-caption';
+  
+	if($layer->type=='text'){
+		$vars['attributes_array']['class'][] = $layer->text_style;
+    $vars['classes_array'][] = $layer->text_style;
+	}
+	if(isset($layer->custom_class) && $layer->custom_class){
+		$vars['attributes_array']['class'][] = $layer->custom_class;
+    $vars['classes_array'][] = $layer->custom_class;
+	}
+	$vars['attributes_array']['data-x'] = $layer->left;
+	$vars['attributes_array']['data-y'] = $layer->top;
+
+  $vars['attributes_array']['data-start'] = $layer->data_time_start;
+  
+  if($scount > 1 && ($layer->data_time_end + 20) < $settings->delay  && ((int)$layer->data_time_end > (int)$layer->data_time_start)){
+    $vars['attributes_array']['data-end'] = $layer->data_time_end;
+  }  
+
+  $vars['attributes_array']['data-transform_idle'] ="o:1;";
+  
+  $transform_in = '';
+  if($layer->incomingclasses){
+    $tmp = gaviasGetArrAnimations()[$layer->incomingclasses];
+    if($tmp){
+      $params = (array)$tmp['params'];
+      if(isset($params['split']) && $params['split'] && $params['split'] == 'chars') {
+        $vars['attributes_array']['data-splitin'] = $params['split'];
+        $vars['attributes_array']['data-elementdelay'] = 0.1;
+        $vars['attributes_array']['class'][] = 'tp-resizeme splitted';
+        $vars['classes_array'][] ='tp-resizeme splitted';
+      }
+      $transform_in = parseCustomAnimationByArray($params);
+      $search = array('opacity', 'scaleX', 'scaleY', 'skewX','skewY','rotationX', 'rotationY','rotationZ','pers');
+      $replace = array('opacity', 'sX', 'sY', 'skX', 'skY', 'rX', 'rY', 'rZ', 'tP');
+      $transform_in = str_replace($search, $replace, $transform_in);
+    }  
+  }
+  $transform_in .= "s:{$layer->data_speed};e:{$layer->data_easing};";
+  $vars['attributes_array']['data-transform_in'] = $transform_in;
+
+  $transform_out = '';
+  if($layer->outgoingclasses){
+    $tmp_out = gaviasGetArrEndAnimations()[$layer->outgoingclasses];
+
+    if($tmp_out){
+      $params_out = (array)$tmp_out['params'];
+      $transform_out = parseCustomAnimationByArray($params_out);
+      $search = array('opacity', 'scaleX', 'scaleY', 'skewX','skewY','rotationX', 'rotationY','rotationZ','pers');
+      $replace = array('opacity', 'sX', 'sY', 'skX', 'skY', 'rX', 'rY', 'rZ', 'tP');
+      $transform_out = str_replace($search, $replace, $transform_out);
+    }else{
+      $transform_out .= 'auto:auto;';
+    } 
+
+    $transform_out .= "s:{$layer->data_end};e:{$layer->data_endeasing};";
+
+    $vars['attributes_array']['data-transform_out'] = $transform_out;
+  }
+
+	if($layer->custom_css){
+    $custom_css = trim(preg_replace('/\s+/', ' ', $layer->custom_css));
+		$vars['attributes_array']['style'] = 'z-index:'.$vars['zindex'].';'.$custom_css;
+	}else{
+    $vars['attributes_array']['style'] = 'z-index:'.$vars['zindex'];
+  }
+	if($layer->incomingclasses == 'customin'){
+		$vars['attributes_array']['data-customin'] = $layer->customin;
+	}
+	if($layer->outgoingclasses == 'customout'){
+		$vars['attributes_array']['data-customout'] = $layer->customout;
+	}
+	switch($layer->type){
+		case 'text':
+			if($layer->link){
+				$vars['content'] = l($layer->text,$layer->link,array('html'=>true));
+			}else{
+				$vars['content'] = $layer->text;
+			}
+			break;
+		case 'image':
+    
+      $image = $layer->image;
+			if($layer->link){
+				$vars['content'] = l("<img src=\"{$image}\"/>",$layer->link, array('html'=>true));
+			}else{
+				$vars['content'] = "<img src=\"{$image}\"/>";
+			}
+			break;
+	}
+}

@@ -1,0 +1,450 @@
+// Block Layout styles
+//----------------------------
+.block {
+  background: $nocolor;
+  margin-bottom: 30px;
+  .block-title {
+    background: none;
+    text-align: center;
+    background: url('#{$base-theme-image-path}/bg-title.png') no-repeat scroll bottom center transparent;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    h1, h2, h3, h4{
+      margin: 0;
+    }
+    span{
+      display: inline-block;
+      font-size: 24px;
+      font-weight: bold;
+      text-transform: uppercase;
+      color : $black;
+      position: relative;
+      letter-spacing: 3px;
+    }
+  }
+  .block-content{
+    //padding: 10px;
+  }
+  .block-description{
+    text-align: center;
+    font-weight: 400;
+    font-size: $font-size-base + 2;
+    margin-bottom: 30px;
+    padding: 0 20%;
+    @media(max-width: $screen-sm-max){
+      padding: 0 10px;
+    }
+  }
+  &.block-none, &.no-padding{
+    background: none!important;
+    padding: 0!important;
+    .block-content{
+      padding: 0!important;
+    }
+  }
+  &.no-title{
+    margin-top: 0;
+  }
+  &.style-higlight{
+    background: #34495E;
+    .block-title {
+      h2{
+        margin: 0;
+        padding: 0;
+        border: none;
+        span{
+          padding: 10px;
+          background: #4E6984;
+          color: $white;
+        }
+      }
+    }
+    .post-title a{
+      color: $white; 
+    }
+    .more-link a{
+      color: $white;
+      padding: 0 15px 15px;
+      display: block;
+      &:hover{
+        color: $theme-color;
+      }
+    }
+  }
+  &.block-left{
+    .block-title{
+      background: none;
+      text-align: left;
+      margin-bottom: 0!important; 
+    }
+  }
+  &.block-right{
+    .block-title{
+      background: none;
+      text-align: right;
+      margin-bottom: 0!important;
+    }
+  }
+  &.widget-white, .block-white{
+    .block-title {
+      background: url('#{$base-theme-image-path}/bg-title-white.png') no-repeat scroll bottom center transparent;
+      span{
+        color: $white!important;
+      }
+    }
+    .block-description{
+      color: $white;
+    }
+  }
+  &.no-title{
+    border: none;
+    & > .block-inner > .block-title, & > .block-title {
+      padding: 0;
+      margin: 0;
+      background: none;
+    }
+  }
+  &.black-color{
+    .block-title h2{
+      border-color: #444444;
+      span{
+        color: #444444;
+      }
+    }
+  } 
+  &.blue-color{
+    .block-title h2{
+      border-color: #4089ea;
+      span{
+        color: #4089ea;
+      }
+    }
+  } 
+  &.red-color{
+    .block-title h2{
+      border-color: #e84c3d;
+      span{
+        color: #e84c3d;
+      }  
+    }
+  }
+  &.green-color{
+    .block-title h2{
+      border-color: #2fcc71;
+      span{
+        color: #2fcc71;
+      }
+    }  
+  }
+  &.navi-color{
+    .block-title h2{
+      border-color: #2a80b9;
+      span{
+        color: #2a80b9;
+      }
+    }
+  }
+  &.yellow-color{
+    .block-title h2{
+      border-color: #f1c40f;
+      span{
+        color: #f1c40f;
+      }
+    }
+  }
+    &.brown-color{
+    .block-title h2{
+      border-color: #4e6984;
+      span{
+        color: #4e6984;
+      }
+    }
+  }
+  &.oranger-color{
+    .block-title h2{
+      border-color: #EB866A;
+      span{
+        color: #EB866A;
+      }
+    }
+  }
+  &.block-tb-megamenu{
+    position: static!important;
+  }
+}
+
+/* ---  Footer Block --- */
+#footer{
+  .block{
+    .block-title{
+      text-align: left;
+      background: none;
+      padding-bottom: 10px;
+      span{
+        font-size: 18px;
+        color: $white;
+        position: relative;
+      }
+    }
+  }
+}
+
+/* ---  Sidebar Block --- */
+.sidebar{
+  .block{
+    background: $white;
+    margin-bottom: 30px;
+    .block-title{
+      margin: 0;
+      border: none;
+      text-align: left;
+      position: relative;
+      padding: 0 0 10px;
+      margin: 0 0 20px;
+      background: none;
+      &:after{
+          margin-left: 0;
+          border-bottom: none; 
+          width: 100%;
+          height: 1px;
+          content: "";
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          z-index: 1;
+          background: $theme-color;
+        }
+      span{
+        font-size: 16px;
+        margin: 0;
+        padding: 0;
+        &:after{
+          content: none;
+        }
+        
+      }
+    }
+    .block-content{
+      //padding: 0 20px;
+    }
+    .post-block{
+      margin-bottom: 20px;
+    }
+  }
+}
+
+.region-main-menu{
+  .block{
+    background: $nocolor;
+    .block-content{
+      padding: 0;
+    }
+  }
+}
+
+/* ---  Custom Block --- */
+.show-case{
+  .item{
+    .highlight-icon{
+      margin: 0 auto 15px;
+      text-align: center;
+      i{
+        font-size: 40px;
+        border: 1px solid $border-color;
+        @include border-radius(50%);
+        width: 105px;
+        line-height: 105px;
+        color: #000; 
+        position: relative;
+        z-index: 1;
+        display: inline-block;
+        text-align: center;
+        padding-left: 10px;
+        &:after{
+          @include opacity(0);
+          top: 0px;
+          left: 0px;
+          z-index: -1;
+          background: $theme-color;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+           @include border-radius(50%);
+          content: '';
+          @include scale(1.3);
+          @include opacity(0);
+          @include transition(all 0.3s);
+        }
+      }
+    } 
+    .highlight_content{
+      padding:0 20px;
+      h4{
+        text-align:center;
+        font-size: $font-size-base + 2;
+        font-weight: 700;
+        color: #000;
+        text-transform: uppercase;
+        padding-bottom: 20px;
+      }
+      p{
+        text-align: center;
+        font-weight: 400;
+        line-height: 1.8;
+      }
+    }
+    &:hover{
+      i{
+        color: #fff;
+        &:after{
+          @include scale(1);
+          @include opacity(1);
+        }
+      }
+    }
+  }
+}
+
+//--------- Block recent comment ---------------------
+.recent-comment-block{
+  .views-field-picture{
+    margin-right: 10px;
+  }
+  .views-field-title{
+    margin-top: -4px;
+    a{
+      font-weight: 700;
+    }
+  }
+  .views-field-name{
+    color: #a4a4a4;
+    a{
+      color: #a4a4a4;
+    }
+  }
+}
+
+//------------ Block newsletter --------------------------
+.newsletter-default{
+  padding: 20px;
+  margin: 0;
+  .block-content{
+    padding: 0 15%;
+    @media(max-width: $screen-sm-max){
+      padding: 0;
+    }
+    > div{
+      > p{
+        width: 35%;
+        float: left;
+        text-transform: uppercase;
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 36px;
+        color: $black;
+
+        @media(max-width: $screen-xs-max){
+          width: 100%;
+          float: none;
+        }
+      }
+      > form{
+        width: 65%;
+        float: left;
+        @media(max-width: $screen-xs-max){
+          width: 100%;
+          float: none;
+        }
+      }
+    }
+    form{
+      padding-right: 30px;
+      label[for*="edit-mail"]{
+        display: none;
+      }
+      .form-item {
+        padding: 0;
+        margin: 0;
+        width: 70%;
+        float: left;
+        input[type*="text"]{
+          background: $white;
+          border: 1px solid $border-color;
+          width: 100%;
+          height: 36px;
+        }
+      }
+    }
+    #edit-submit{
+      width: 30%;
+      float: left;
+    }
+  }  
+}
+
+ul.widget-twitter{
+  > li{
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    &:last-child{
+      border: none;
+    }
+    .avata{
+      margin-right: 10px;
+      text-align: center;
+      float: left;
+    }
+  }
+}
+
+.list-tags{
+  .view-list{
+    ul > li{
+      float: left;
+      border: 1px solid $border-color;
+      display: inline-block;
+      width: auto!important;
+      padding: 0!important;
+      margin: 0 10px 10px 0!important;
+      a{
+        padding: 6px 10px;
+        display: block;
+        @include transition(all 0.35s);
+      }
+      &:hover{
+        background: $theme-color;
+        a{
+          color: $white;
+        }
+      }
+    }
+  }
+}
+
+.contact-info{
+  line-height: 28px;
+}
+
+.contact-us .block-content{
+  line-height: 2.2;
+}
+
+.flickr-widget{
+    .flickr_badge_image{
+        margin: 0 3% 10px 0 !important;
+        width: 30.33%!important;
+        overflow: hidden;
+        float: left;
+        img{
+            transition: all 0.35s;
+        }
+        a{
+            &:hover{
+                img{
+                    @include scale(1.2);
+                }
+            }
+        }
+    }
+}

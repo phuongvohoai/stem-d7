@@ -1,0 +1,19 @@
+@import 'vars/_variables';
+
+// images folder path of theme 
+$base-theme-image-path : '../images/'!default;
+
+//------- FONTS
+$fa-font-path							: "../fonts" !default;
+$font-icon 								: "FontAwesome"!default;
+$font-second                     : "brandon"!default;
+//-------- COLOR --------------
+$black 			 					   : #000 !default; 
+$white                           : #fff !default;
+$nocolor                         : transparent !default;
+//--------- COLORS
+$theme-color-rgba                 : rgba(23, 155, 178, 0.6) !default;
+$theme-color							 : #179BB2!default;
+$theme-color-second               : #444444 !default;
+$border-color-dark                : rgba(255, 255, 255, 0.1)!default;
+$border-color                     : rgba(0, 0, 0, 0.1)!default; 

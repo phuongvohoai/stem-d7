@@ -1,0 +1,281 @@
+<?php
+
+module_load_include('inc', 'gavias_themer', 'inc/model');
+
+function gavias_themer_menu() {
+    $items = array();
+ //-------------------
+    $items['admin/gavias_customize/preview'] = array(
+        'title' => 'Preview Customize for Frontend',
+        'page callback' => 'gavias_customize_frontend',
+        'access arguments' => array('gavias_customize_preview'),
+        'type' => MENU_CALLBACK
+    );
+
+    $items['admin/gavias_customize/save'] = array(
+        'title' => 'Save Customize Profile',
+        'page callback' => 'gavias_customize_profile_save',
+        'access arguments' => array('admin_gavias_customize'),
+        'type' => MENU_CALLBACK
+    );
+
+    $items['admin/gavias_customize/active'] = array(
+        'title' => 'Active Customize Profile',
+        'page callback' => 'gavias_customize_active',
+        'access arguments' => array('admin_gavias_customize'),
+        'type' => MENU_CALLBACK
+    );  
+  
+  $items['admin/gavias_customize/delete'] = array(
+        'title' => 'Settings',
+        'page callback' => 'gavias_customize_profile_delete',
+        'access arguments' => array('admin_gavias_customize'),
+        'type' => MENU_CALLBACK
+    );
+  
+    // To use local task menu items, there must be a parent page.
+    $items['contextual'] = array(
+        'title' => 'The contextual example page',
+        'page callback' => 'contextual_example_page',
+        'page arguments' => array(
+            1
+        ),
+        'access callback' => TRUE
+    );
+
+    return $items;
+}
+
+/**
+ * Implements hook_permission()
+ */
+function gavias_themer_permission() {
+    return array(
+        'admin_gavias_customize' => array(
+            'title' => t('Administer Gavias Customize'),
+        ),
+        'gavias_customize_preview' => array(
+            'title' => t('Preview FrontEnd Gavias Customize ')
+        )
+    );
+}
+
+function gavias_load_fontend(){
+    if(user_access('gavias_customize_preview')){
+        drupal_add_css(drupal_get_path('module', 'gavias_themer') . '/vendor/colorpicker/css/colorpicker.css', array('group' => CSS_DEFAULT, 'type' => 'file'));
+        drupal_add_js(drupal_get_path('module', 'gavias_themer') . '/vendor/colorpicker/js/colorpicker.js', array('group' => JS_DEFAULT, 'type' => 'file'));
+        drupal_add_js(drupal_get_path('module', 'gavias_themer') . '/assets/admin.js', array('group' => JS_DEFAULT, 'type' => 'file'));
+    }
+}
+
+
+function gavias_customize_profile_save() {
+    header('Content-type: application/json');
+    $data = $_REQUEST['data'];
+    $profile_name = $_REQUEST['gavias_profile_customize_name'];
+    $profile_new = $_REQUEST['gavias_profile_customize_new'];
+    $file_name = 'profile-' . time();
+    if(trim($profile_name) == ''){
+        if(trim($profile_new) != '')
+            $file_name = $profile_new;
+    }else{
+        $file_name = $profile_name;
+    } 
+    $file_name = preg_replace('/[^A-Z0-9\._-]/i', '', $file_name);
+    $theme_name = variable_get('theme_default', NULL);
+
+    gavias_customize_writecache(drupal_get_path('theme',$theme_name) . '/customize/save/', $file_name, $data, 'json' );
+   
+    ob_start();
+    include drupal_get_path('theme',$theme_name) . '/customize/dynamic_style.php';
+    $content = ob_get_clean();
+    gavias_customize_writecache(drupal_get_path('theme',$theme_name) . '/customize/save/', $file_name, $content, 'css' );
+    ob_start();
+    $profiles = gavias_customize_list_profile();
+    if($profiles) ?>
+    <option value="">Create New Profile</option>
+     <?php
+        if(isset($profiles) && $profiles){
+           foreach ($profiles as $key => $profile) {
+     ?>     
+        <option value="<?php print $profile['skin']; ?>" <?php if($file_name==$profile['skin']) echo 'selected' ?>><?php print $profile['name']; ?></option>
+     <?php
+           }
+        }
+     ?>
+    <?php 
+    $option_profile = ob_get_clean(); 
+    variable_set('gavias_profile', $file_name);
+    $return['msg']="Success.";
+    $return['data_profile'] = $option_profile;
+   echo json_encode($return);
+   exit(0);
+}
+
+function gavias_customize_active(){
+    header('Content-type: application/json');
+    $profile_name = $_REQUEST['gavias_profile_customize_name'];
+    variable_set('gavias_profile', $profile_name);
+    $return['msg']="Success.";
+    echo json_encode($return);
+    exit(0);
+}
+
+function gavias_customize_frontend() {
+    header('Content-type: application/json');
+    $data = $_REQUEST['data'];
+   
+    $theme_name = variable_get('theme_default', NULL);
+
+    ob_start();
+    include drupal_get_path('theme',$theme_name) . '/customize/dynamic_style.php';
+    $content = ob_get_clean();
+
+    gavias_customize_writecache(drupal_get_path('theme',$theme_name) . '/customize/save/', $file_name, $content, 'css' );
+    
+    $return['style']= $content;
+
+    echo json_encode($return);
+
+    exit(0);
+
+}
+
+function gavias_customize_profile_delete(){
+    $profile_name = $_REQUEST['gavias_profile_customize_name'];
+    $theme_name = variable_get('theme_default', NULL);
+    $current_profile = variable_get('gavias_profile');
+    if(file_exists(drupal_get_path('theme',$theme_name) . '/customize/save/' . $profile_name . '.css')){
+        unlink( drupal_get_path('theme',$theme_name) . '/customize/save/' . $profile_name . '.css' );
+    }
+    if(file_exists(drupal_get_path('theme',$theme_name) . '/customize/save/' . $profile_name . '.json')){
+        unlink( drupal_get_path('theme',$theme_name) . '/customize/save/' . $profile_name . '.json' );
+    }
+
+    ob_start();
+    $profiles = gavias_customize_list_profile();
+    if($profiles) ?>
+    <option value="">Create New Profile</option>
+     <?php
+        if(isset($profiles) && $profiles){
+           foreach ($profiles as $key => $profile) {
+     ?>     
+        <option value="<?php print $profile['skin']; ?>" <?php if($current_profile==$profile['skin']) echo 'selected' ?>><?php print $profile['name']; ?></option>
+     <?php
+           }
+        }
+     ?>
+    <?php 
+    $option_profile = ob_get_clean(); 
+
+     $return['msg']="Success.";
+    $return['data_profile'] = $option_profile;
+     echo json_encode($return);
+     exit(0);
+}
+
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function gavias_themer_form_menu_edit_item_alter(&$form, &$form_state, $form_id) {
+  global $base_url;
+
+  if (isset($form_state['build_info']['args'][0]) && $form_state['build_info']['args'][0] == 'add') {
+    if (!isset($form_state['build_info']['args'][2]['menu_name']) || $form_state['build_info']['args'][2]['menu_name'] != 'main-menu') {
+      return;
+    }
+  }
+  if (isset($form_state['build_info']['args'][0]) && $form_state['build_info']['args'][0] == 'edit') {
+    if (!isset($form_state['build_info']['args'][1]['menu_name']) || $form_state['build_info']['args'][1]['menu_name'] != 'main-menu') {
+      return;
+    }
+  }
+  
+  $value = $layout = $layout_col = $menu_icon ='';
+  if ($form['mlid']['#value'] != 0) {
+    $layout = variable_get('gavias_menu_layout_' . $form['mlid']['#value'], '');
+    $layout_col = variable_get('gavias_menu_layout_col_' . $form['mlid']['#value'], '');
+    $menu_icon = variable_get('gavias_menu_icon_' . $form['mlid']['#value'], '');
+  }
+  $form['menu_icon'] = array(
+    '#title' => 'Menu icon',
+    '#type' => 'textfield',
+    '#default_value' => $menu_icon,
+    '#description' => 'This support display icon from FontAwsome, Please click <a href="//fortawesome.github.io/Font-Awesome/" target="_blank"">here to see the list</a>'
+  );
+
+  $form['layout'] = array(
+    '#title' => 'Choose Menu Style',
+    '#type' => 'select',
+    '#options'  => array(
+        'menu-list'         => 'List',
+        'menu-grid'         => 'Columns',
+    ),
+    '#weight' => 1,
+    '#default_value' => $layout,
+    '#states'   => array(
+        'visible' => array(
+            ':input[name="parent"]' => array(
+                array('value' => 'main-menu:0'),
+            ),
+        ),
+    ),
+  );
+  $form['layout_col'] = array(
+    '#title'  => 'Choose Number of Columns',
+    '#type'   => 'select',
+    '#options'    => array(
+        '2'       => '2',
+        '3'       => '3',
+        '4'       => '4',
+        '5'       => '5',
+    ),
+    '#weight' => 2,
+    '#default_value' => $layout_col,
+    '#states'   => array(
+        'visible' => array(
+            ':input[name="layout"]' => array(
+                array('value' => 'menu-grid'),
+            ),
+        ),
+    ),
+  );
+
+  $form['link_title']['#weight'] = -2;
+  $form['#submit'][] = 'gavias_themer_form_menu_edit_submit';
+}
+
+/**
+ * Store class to drupal variable.
+ */
+function gavias_themer_form_menu_edit_submit($form, $form_state) {
+  variable_set('gavias_menu_layout_' . $form_state['values']['mlid'], $form_state['values']['layout']);
+  variable_set('gavias_menu_layout_col_' . $form_state['values']['mlid'], $form_state['values']['layout_col']);
+  variable_set('gavias_menu_icon_' . $form_state['values']['mlid'], $form_state['values']['menu_icon']);
+}
+
+/**
+ * @see theme_menu_link(&$vars).
+ */
+function gavias_themer_preprocess_menu_link(&$vars) {
+  $element = &$vars['element'];
+  if ($element['#original_link']['menu_name'] == 'main-menu') {
+    $layout = variable_get('gavias_menu_layout_' . $element['#original_link']['mlid'], '');
+    $element['#attributes']['menu_layout'][] = $layout;
+    $menu_col = variable_get('gavias_menu_layout_col_' . $element['#original_link']['mlid'], '');
+    $element['#attributes']['menu_col'][] = $menu_col;
+    $menu_icon = variable_get('gavias_menu_icon_' . $element['#original_link']['mlid'], '');
+    $element['#attributes']['menu_icon'][] = $menu_icon;
+    
+  }
+}
+
+/**
+ * Implement hook_admin_paths().
+ */
+function gavias_themer_admin_paths() {
+  return array(
+    'comment/*/edit' => 'true'
+  );
+}

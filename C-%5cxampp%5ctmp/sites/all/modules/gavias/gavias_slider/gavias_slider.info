@@ -1,0 +1,10 @@
+name = Gavias Slider
+description = "Gavias Slider module base on Responsive jQuery Slider."
+dependencies[] = jquery_update
+dependencies[] = libraries
+dependencies[] = media
+package = gavias
+core = 7.x
+version = "7.x-1.0"
+project = "Gavias Slider"
+datestamp = "1408054689"
